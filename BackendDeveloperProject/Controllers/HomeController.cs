@@ -17,5 +17,10 @@ namespace BackendDeveloperProject.UI.Controllers
         {
             return View();
         }
+
+        public ActionResult RefreshToken()
+        {
+            return PartialView("_AntiForgeryToken");
+        }
     }
 }

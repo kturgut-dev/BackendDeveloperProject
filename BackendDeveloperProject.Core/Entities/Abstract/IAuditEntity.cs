@@ -3,6 +3,6 @@
     public interface IAuditEntity : IEntity
     {
         public DateTime CreatedAt { get; set; }
-        public string CreatedBy { get; set; }
+        public long CreatedBy { get; set; }
     }
 }

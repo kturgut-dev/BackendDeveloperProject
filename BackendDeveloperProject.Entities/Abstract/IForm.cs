@@ -7,6 +7,6 @@ namespace BackendDeveloperProject.Entities.Abstract
     {
         public string? Name { get; set; }
         public string? Description { get; set; }
-        public List<FormField>? Fields { get; set; }
+        public IList<FormField>? Fields { get; set; }
     }
 }

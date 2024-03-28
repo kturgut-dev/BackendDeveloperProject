@@ -1,4 +1,5 @@
 ﻿using BackendDeveloperProject.Core.DataAccess.EntityFramework;
+using BackendDeveloperProject.DataAccess.Configurations;
 using BackendDeveloperProject.Entities.Concrete;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -15,6 +16,14 @@ namespace BackendDeveloperProject.DataAccess
         protected ProjectDbContext(DbContextOptions options, IConfiguration configuration) : base(options, configuration)
         {
 
+        }
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            base.OnModelCreating(modelBuilder);
+
+            modelBuilder.ApplyConfiguration(new UserConfiguration());
+            modelBuilder.ApplyConfiguration(new FormConfiguration());
         }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)

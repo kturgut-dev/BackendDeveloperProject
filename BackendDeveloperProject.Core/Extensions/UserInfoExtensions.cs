@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BackendDeveloperProject.Core.Helpers;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using System.Security.Claims;
 
-namespace BackendDeveloperProject.Core.Helpers
+namespace BackendDeveloperProject.Core.Extensions
 {
     public static class UserInfoExtensions
     {

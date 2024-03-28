@@ -38,12 +38,12 @@ namespace BackendDeveloperProject.Core.DataAccess.EntityFramework.Concrete
             }
         }
 
-        public virtual async Task<TEntity> AddAsync(TEntity entity)
+        public virtual async Task<TEntity> AddAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             try
             {
                 _context.Entry(entity).State = EntityState.Added;
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
                 return entity;
             }
             catch (Exception ex)
@@ -74,7 +74,7 @@ namespace BackendDeveloperProject.Core.DataAccess.EntityFramework.Concrete
             }
         }
 
-        public async Task<bool> UpdateAsync(TEntity entity)
+        public async Task<bool> UpdateAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             try
             {
@@ -85,7 +85,7 @@ namespace BackendDeveloperProject.Core.DataAccess.EntityFramework.Concrete
                         if (property.GetValue(entity, null) is not null)
                             property.SetValue(oldRec, property.GetValue(entity, null), null);
                     _context.Entry(oldRec).State = EntityState.Modified;
-                    await _context.SaveChangesAsync();
+                    await _context.SaveChangesAsync(cancellationToken);
                     return true;
                 }
             }
@@ -101,9 +101,9 @@ namespace BackendDeveloperProject.Core.DataAccess.EntityFramework.Concrete
             return _dbSet.AsNoTracking().FirstOrDefault(expression);
         }
 
-        public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> expression)
+        public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> expression, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.AsNoTracking().AsQueryable().FirstOrDefaultAsync(expression);
+            return await _dbSet.AsNoTracking().AsQueryable().FirstOrDefaultAsync(expression, cancellationToken);
         }
 
         public TEntity GetById(long id)
@@ -111,9 +111,9 @@ namespace BackendDeveloperProject.Core.DataAccess.EntityFramework.Concrete
             return _dbSet.AsNoTracking().FirstOrDefault(x => x.Id == id);
         }
 
-        public async Task<TEntity> GetByIdAsync(long id)
+        public async Task<TEntity> GetByIdAsync(long id, CancellationToken cancellationToken = default)
         {
-            return await _dbSet.AsNoTracking().AsQueryable().FirstOrDefaultAsync(x => x.Id == id);
+            return await _dbSet.AsNoTracking().AsQueryable().FirstOrDefaultAsync(x => x.Id == id, cancellationToken);
         }
 
 
@@ -124,11 +124,11 @@ namespace BackendDeveloperProject.Core.DataAccess.EntityFramework.Concrete
                 : _dbSet.AsNoTracking().Where(expression);
         }
 
-        public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? expression = null)
+        public async Task<IEnumerable<TEntity>> GetListAsync(Expression<Func<TEntity, bool>>? expression = null, CancellationToken cancellationToken = default)
         {
             return expression == null
-                ? await _dbSet.AsNoTracking().ToListAsync()
-                : await _dbSet.AsNoTracking().Where(expression).ToListAsync();
+                ? await _dbSet.AsNoTracking().ToListAsync(cancellationToken)
+                : await _dbSet.AsNoTracking().Where(expression).ToListAsync(cancellationToken);
         }
 
 
@@ -146,12 +146,12 @@ namespace BackendDeveloperProject.Core.DataAccess.EntityFramework.Concrete
             }
         }
 
-        public async Task<bool> DeleteAsync(TEntity entity)
+        public async Task<bool> DeleteAsync(TEntity entity, CancellationToken cancellationToken = default)
         {
             try
             {
                 _context.Entry(entity).State = EntityState.Deleted;
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
                 return true;
             }
             catch (Exception)
@@ -160,14 +160,14 @@ namespace BackendDeveloperProject.Core.DataAccess.EntityFramework.Concrete
             }
         }
 
-        public async Task<bool> DeleteByIdAsync(long id)
+        public async Task<bool> DeleteByIdAsync(long id, CancellationToken cancellationToken = default)
         {
             try
             {
-                TEntity entity = await GetAsync(x => x.Id == id);
+                TEntity entity = await GetAsync(x => x.Id == id, cancellationToken);
                 if (entity == null) return false;
                 _context.Entry(entity).State = EntityState.Deleted;
-                await _context.SaveChangesAsync();
+                await _context.SaveChangesAsync(cancellationToken);
                 return true;
             }
             catch (Exception)

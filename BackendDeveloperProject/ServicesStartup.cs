@@ -34,6 +34,9 @@ namespace BackendDeveloperProject
             services.AddScoped<IUserRepository, UserRepository>();
             services.AddScoped<IUserService, UserService>();
 
+            services.AddScoped<IFormRepository, FormRepository>();
+            services.AddScoped<IFormService, FormService>();
+
             // dotnet ef migrations add mig-changes --context ProjectDbContext --project BackendDeveloperProject
             // dotnet ef database update --context ProjectDbContext --project BackendDeveloperProject
         }

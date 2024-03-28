@@ -1,0 +1,83 @@
+﻿@model DataResult<IEnumerable<Form>>
+
+<a href="@Url.Action("Create","Forms")" class="btn btn-outline-primary">Kayıt Ekle</a>
+
+<div class="card-body">
+    <table id="tableForms" class="table table-striped border p-3">
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Ad</th>
+                <th>İşlemler</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model?.IsSuccess == true)
+            {
+                @foreach (Form row in Model.Data)
+                {
+                    <tr>
+                        <td>@row.Id</td>
+                        <td>@row.Name</td>
+                        <td>
+                            <a href="/Form/@row.Id" class="btn btn-primary">Görüntüle</a>
+                            <a href="/Form/@row.Id/Form" class="btn btn-warning" data-id="@row.Id">Düzenle</a>
+                            <button type="button" class="btn btn-danger" onclick="deleteRow(this,@row.Id)" data-id="@row.Id">Sil</button>
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+
+
+@section Styles{
+    <link rel="stylesheet" href="https://cdn.datatables.net/2.0.3/css/dataTables.dataTables.css" />
+}
+
+@section Scripts{
+    <script src="https://cdn.datatables.net/2.0.3/js/dataTables.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/1.6.8/axios.min.js" integrity="sha512-PJa3oQSLWRB7wHZ7GQ/g+qyv6r4mbuhmiDb8BjSFZ8NZ2a42oTtAq5n0ucWAwcQDlikAtkub+tPVCw4np27WCg==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+
+        let table = new DataTable('#tableForms', {
+            // config options...
+        });
+
+    </script>
+
+    <script>
+        function deleteRow(e,id) {
+            //let id = $(e).data("id")
+
+            Swal.fire({
+                title: "Silmek istediğinize emin misiniz?",
+                showDenyButton: true,
+                confirmButtonText: "Evet",
+                denyButtonText: "Hayır"
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    axios.delete('/Forms/' + id + '/Delete')
+                        .then(function (res) {
+                            console.log(res)
+                            Swal.fire("Silindi!", "", "success");
+                            $(e).parents('tr').remove();
+                        })
+                        .catch(function (error) {
+                            // handle error
+                            console.log(error);
+                        })
+                }
+            });
+        }
+
+        function updateRow(e) {
+            let id = $(e).data("id")
+            window.location.href = "/Admin/PageContent/" + id + "/Form";
+        }
+    </script>
+}

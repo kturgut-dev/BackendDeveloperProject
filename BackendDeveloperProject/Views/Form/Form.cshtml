@@ -1,0 +1,158 @@
+﻿@model Form
+@{
+    List<SelectListItem> filedTypes = new List<SelectListItem>
+{
+        new SelectListItem {Text = "Metin", Value = "STRING"},
+        new SelectListItem {Text = "Sayısal", Value = "NUMBER"}
+    };
+}
+
+<div class="card-body">
+    @using (Html.BeginForm("Form", "Form", FormMethod.Post, new { enctype = "multipart/form-data", @class = "", id = "contentForm" }))
+    {
+        @Html.ValidationMessage("GlobalError", new { @class = "text-danger" })
+        @Html.AntiForgeryToken()
+        @Html.HiddenFor(x => x.Id)
+        @Html.HiddenFor(x => x.CreatedBy)
+        @Html.HiddenFor(x => x.CreatedAt)
+
+        <div class="row">
+
+            <!-- Name -->
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Name, "Başlık")
+                    @Html.TextBoxFor(x => x.Name, new { @class = "form-control", placeholder = "Başlık", required = true })
+                    @Html.ValidationMessageFor(x => x.Name, null, new { @class = "invalid-feedback d-block" })
+                </div>
+            </div>
+            <!-- Description -->
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Description, "Açıklama")
+                    @Html.TextAreaFor(x => x.Description, new { @class = "form-control", placeholder = "Açıklama" })
+                    @Html.ValidationMessageFor(x => x.Description, null, new { @class = "invalid-feedback d-block" })
+                </div>
+            </div>
+
+            <!-- Fields -->
+            <div class="col-md-12">
+                <div class="form-group">
+                    @Html.LabelFor(x => x.Fields, "Alanlar")
+                    @Html.ValidationMessageFor(x => x.Fields, null, new { @class = "invalid-feedback d-block" })
+
+                    <button type="button" class="btn btn-outline-primary" id="addField">Alan Ekle</button>
+
+                    <hr />
+
+                    <ul class="list-group" id="formFields">
+
+                        @if (Model?.Fields != null)
+                        {
+                            @for (int i = 0; i < Model.Fields.Count; i++)
+                            {
+                                <li class="list-group-item">
+                                    <div class="p-3 border form-gr row mt-2">
+                                        <div class="form-group col">
+                                            <label for="exampleInputEmail1">Başlık</label>
+                                            <input type="text" name="Fields[@i].Name" required asp-for="@Model.Fields[i].Name" class="form-control">
+                                        </div>
+
+
+                                        <div class="form-group col">
+                                            <label for="exampleInputEmail1">Veri Tipi</label>
+                                            <select asp-for="@Model.Fields[i].DataType" asp-items="filedTypes" class="form-control" name="Fields[@i].DataType"></select>
+                                        </div>
+
+                                        <div class="form-group col">
+                                            @Html.CheckBoxFor(x => x.Fields[i].Required, new { @class = "form-check-input" })
+                                            <label for="exampleInputEmail1">Boş Geçilemez?</label>
+                                        </div>
+
+                                        <div class="form-group col">
+                                            <a href="#" type="button" class="btn btn-danger removeFieldItem" data-id="@i">Sil</a>
+                                        </div>
+
+                                    </div>
+                                </li>
+                            }
+                        }
+
+                    </ul>
+
+                </div>
+            </div>
+
+            <!-- End of tab -->
+            <div class="col-md-6 mt-2">
+                <button class="btn btn-block btn-outline-success d-block" id="saveButton" type="submit">
+                    <i class="fa fa-save"></i>
+                    Kaydet
+                </button>
+            </div>
+        </div>
+    }
+</div>
+
+@section Scripts{
+
+    <script>
+
+        $("#addField").on("click", (e) => {
+
+            let countItem = $('ul#formFields li').length;
+
+            $("ul#formFields").append('<li class="list-group-item">' +
+
+                '<div class="p-3 border form-gr row mt-2" >' +
+                '<div class="form-group col">' +
+                '<label for="exampleInputEmail1">Başlık</label>' +
+                '<input type="text" required name="Fields[' + countItem + '].Name" class="form-control">' +
+                '</div>' +
+
+                '<div class="form-group col">' +
+                '<label for="exampleInputEmail1">Veri Tipi</label>' +
+                '<select class="form-control" required name="Fields[' + countItem + '].DataType">' +
+                '<option value="STRING">Metin</option>' +
+                '<option value="NUMBER">Sayısal</option>' +
+                '</select>' +
+                '</div>' +
+
+                '<div class="form-group col">' +
+                '<input type="checkbox" class="form-check-input" name="Fields[' + countItem + '].Required">' +
+                '<label for="exampleInputEmail1">Boş Geçilemez?</label>' +
+                '</div>' +
+
+                '<div class="form-group col">' +
+                '<a href="#" type="button" data-id="' + countItem + '" class="btn btn-danger removeFieldItem">Sil</a>' +
+                '</div >' +
+
+                '</div >' +
+                '</li > ');
+
+        });
+
+        $("#saveButton").on('click', function (e) {
+
+            let countItem = $('ul#formFields li').length;
+
+            if (countItem == 0) {
+                e.preventDefault();
+                alert('En az 1 adet form alanı girilmelidir.');
+            }
+        });
+
+
+
+        //$(".removeFieldItem").on("click", (e) => {
+        //   $(e.target).closest('li').remove()
+        //});
+
+        $(document).on('click', '.removeFieldItem', function () {
+            $(this).closest('li').remove()
+        });
+
+    </script>
+
+
+}
