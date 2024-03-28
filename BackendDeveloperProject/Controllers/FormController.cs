@@ -22,10 +22,15 @@ namespace BackendDeveloperProject.UI.Controllers
 
         [HttpGet]
         [Route("List")]
-        public async Task<IActionResult> Index(CancellationToken cancellationToken = default)
+        public async Task<IActionResult> Index(string name = null, CancellationToken cancellationToken = default)
         {
             ViewData["Title"] = "Form Yönetim";
-            return View(await _formService.GetListAsync(cancellationToken));
+
+            DataResult<IEnumerable<Form>> result = !string.IsNullOrEmpty(name) ?
+                await _formService.GetListAsync(x => x.Name.Contains(name), cancellationToken) :
+                await _formService.GetListAsync( cancellationToken);
+
+            return View(result);
         }
 
 

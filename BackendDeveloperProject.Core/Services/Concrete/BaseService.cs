@@ -4,6 +4,7 @@ using BackendDeveloperProject.Core.Entities.Concrete;
 using BackendDeveloperProject.Core.Extensions;
 using BackendDeveloperProject.Core.Services.Abstract;
 using BackendDeveloperProject.Entities.Concrete;
+using System.Linq.Expressions;
 
 namespace BackendDeveloperProject.Core.Services.Concrete
 {
@@ -52,6 +53,15 @@ namespace BackendDeveloperProject.Core.Services.Concrete
         {
             DataResult<IEnumerable<TEntity>> result = new();
             result.Data = await _repository.GetListAsync(cancellationToken: cancellationToken);
+            result.IsSuccess = result.Data != null;
+            result.Message = result.IsSuccess ? "Veri getirme işlemi başarılı." : "Veri getirme işlemi başarısız.";
+            return result;
+        }
+
+        public virtual async Task<DataResult<IEnumerable<TEntity>>> GetListAsync(Expression<Func<TEntity, bool>>? expression = null, CancellationToken cancellationToken = default)
+        {
+            DataResult<IEnumerable<TEntity>> result = new();
+            result.Data = await _repository.GetListAsync(expression, cancellationToken: cancellationToken);
             result.IsSuccess = result.Data != null;
             result.Message = result.IsSuccess ? "Veri getirme işlemi başarılı." : "Veri getirme işlemi başarısız.";
             return result;
