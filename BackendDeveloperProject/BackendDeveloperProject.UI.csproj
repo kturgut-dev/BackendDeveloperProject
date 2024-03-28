@@ -1,0 +1,51 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Business\**" />
+    <Content Remove="Business\**" />
+    <EmbeddedResource Remove="Business\**" />
+    <None Remove="Business\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="Views\Auth\Login.cshtml" />
+    <None Include="Views\Auth\Register.cshtml" />
+    <None Include="Views\Shared\Layouts\_AuthLayout.cshtml" />
+    <None Include="Views\Shared\Layouts\_MainLayout.cshtml" />
+    <None Include="wwwroot\assets\demo\chart-area-demo.js" />
+    <None Include="wwwroot\assets\demo\chart-bar-demo.js" />
+    <None Include="wwwroot\assets\demo\chart-pie-demo.js" />
+    <None Include="wwwroot\assets\demo\datatables-demo.js" />
+    <None Include="wwwroot\assets\img\error-404-monochrome.svg" />
+    <None Include="wwwroot\js\datatables-simple-demo.js" />
+    <None Include="wwwroot\js\scripts.js" />
+    <None Include="wwwroot\js\site.js" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.3">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\BackendDeveloperProject.Core\BackendDeveloperProject.Core.csproj" />
+    <ProjectReference Include="..\BackendDeveloperProject.DataAccess\BackendDeveloperProject.DataAccess.csproj" />
+    <ProjectReference Include="..\BackendDeveloperProject.Entities\BackendDeveloperProject.Entities.csproj" />
+    <ProjectReference Include="..\BackendDeveloperProject.Services\BackendDeveloperProject.Services.csproj" />
+  </ItemGroup>
+
+</Project>

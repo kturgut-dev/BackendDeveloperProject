@@ -1,0 +1,57 @@
+﻿@model UserLoginForm
+
+@{
+    Layout = "~/Views/Shared/Layouts/_AuthLayout.cshtml";
+}
+
+
+<div class="card shadow-lg border-0 rounded-lg mt-5">
+    <div class="card-header"><h3 class="text-center font-weight-light my-4">@ViewData["Title"]</h3></div>
+    <div class="card-body">
+
+        @using (Html.BeginForm("Login", "Auth", FormMethod.Post, new { @class = "mt-4" }))
+        {
+            @Html.ValidationMessage("LoginValidate", new { @class = "text-danger" })
+            @Html.AntiForgeryToken()
+            <!-- Form -->
+            <div class="form-group mb-4">
+                @Html.LabelFor(x => x.Email)
+                <div class="input-group">
+                    @Html.TextBoxFor(x => x.Email, new { @class = "form-control", placeholder = "example@mail.com", autofocus = true })
+                    @Html.ValidationMessageFor(x => x.Email, null, new { @class = "invalid-feedback d-block" })
+                </div>
+            </div>
+            <!-- End of Form -->
+            <div class="form-group">
+                <!-- Form -->
+                <div class="form-group mb-4">
+                    @Html.LabelFor(x => x.Password)
+                    <div class="input-group">
+                        @Html.PasswordFor(x => x.Password, new { @class = "form-control", placeholder = "******" })
+                        @Html.ValidationMessageFor(x => x.Password, null, new { @class = "invalid-feedback d-block" })
+                    </div>
+                </div>
+                <!-- End of Form -->
+                <div class="d-flex justify-content-between align-items-top mb-4">
+                    <div class="form-check">
+                        @Html.CheckBoxFor(x => x.RememberMe, new { @class = "form-check-input" })
+                        @Html.LabelFor(x => x.RememberMe, new { @class = "form-check-label mb-0" })
+                    </div>
+                   @* <div><a href="@Url.ActionLink("ChangePassword","Auth")" class="small text-right">Şifrenizi mi unuttunuz?</a></div>*@
+                </div>
+            </div>
+            @Html.Hidden("ReturnUrl", ViewData["ReturnUrl"])
+
+            <div class="d-grid">
+                <button type="submit" class="btn btn-primary">Giriş Yap</button>
+            </div>
+        }
+
+    </div>
+    <div class="card-footer text-center py-3">
+        <div class="small">  <a href="@Url.ActionLink("Register","Auth")" class="fw-bold">Hesap Oluştur</a></div>
+    </div>
+
+</div>
+
+
